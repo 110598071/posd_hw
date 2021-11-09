@@ -1,15 +1,19 @@
 #include <gtest/gtest.h>
 
-#include "ut_text.h"
-#include "ut_list_item.h"
-#include "ut_paragraph.h"
+#include "ut_rectangle.h"
+#include "ut_circle.h"
+#include "ut_two_dimensional_vector.h"
+#include "ut_triangle.h"
+#include "ut_compound_shape.h"
+#include "ut_iterator.h"
+#include "ut_utility.h"
+#include "ut_visitor.h"
 
 #include <stdlib.h>
 #include <iostream>
+#include <string>
 
 int main(int argc,char** argv){
-    std::cout<< "Hello world!" << std::endl;
-    std::cout<< "Testing!" << std::endl;
     testing::InitGoogleTest(&argc,argv);
     return RUN_ALL_TESTS();
 }

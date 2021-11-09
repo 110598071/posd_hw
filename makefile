@@ -1,10 +1,23 @@
-.PHONY: clean
+.PHONY: clean test
 
-TEST = test/ut_text.h test/ut_list_item.h test/ut_paragraph.h
-SRC = src/text.h src/article.h src/list_item.h src/paragraph.h
+TEST = test/ut_rectangle.h test/ut_circle.h test/ut_triangle.h \
+	  test/ut_two_dimensional_vector.h test/ut_compound_shape.h test/ut_iterator.h \
+	  test/ut_utility.h test/ut_visitor.h
 
-bin/test: test/ut_main.cpp $(TEST) $(SRC) # 相依性檔案 -> [目標檔案(欲產生的檔案)]: [相依檔案]
-	g++ -std=c++11 test/ut_main.cpp -o bin/ut_all -lgtest -lpthread
+SHAPE = src/shape.h src/rectangle.h src/circle.h src/triangle.h \
+	   src/two_dimensional_vector.h src/compound_shape.h src/utility.h
+
+ITERATOR = src/iterator/iterator.h src/iterator/null_iterator.h src/iterator/compound_iterator.h
+
+OBJ = obj/shape_visitor.o
+
+SRC = $(SHAPE) $(ITERATOR)
+
+bin/ut_all: test/ut_main.cpp $(TEST) $(SRC) $(OBJ)
+	g++ -std=c++11 test/ut_main.cpp $(OBJ) -o bin/ut_all -lgtest -lpthread
+
+obj/shape_visitor.o: src/shape_visitor.cpp src/shape_visitor.h
+	g++ -std=c++11 -Wfatal-errors -Wall -c src/shape_visitor.cpp -o obj/shape_visitor.o
 
 clean:
-	rm -f bin/ut_all
+	rm -rf bin/ut_all obj/shape_visitor.os
