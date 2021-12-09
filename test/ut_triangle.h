@@ -1,5 +1,28 @@
 #include "../src/triangle.h"
 #include "../src/two_dimensional_vector.h"
+#include "../src/visitor/shape_info_visitor.h"
+
+TEST(CaseTriangle, Accept) {
+    TwoDimensionalVector tdv1(3, 12.433);
+    TwoDimensionalVector tdv2(7.619, -4);
+    Shape* t1 = new Triangle(tdv1, tdv2);
+    
+    ShapeInfoVisitor* visitor = new ShapeInfoVisitor();
+    ASSERT_NO_THROW(t1->accept(visitor));
+    
+    delete t1;
+}
+
+TEST(CaseTriangle, Delete) {
+    TwoDimensionalVector tdv1(3, 12.433);
+    TwoDimensionalVector tdv2(7.619, -4);
+    Shape* t1 = new Triangle(tdv1, tdv2);
+    Shape* t2 = new Triangle(tdv2, tdv1);
+    
+    ASSERT_THROW(t1->deleteShape(t2), std::out_of_range);
+    delete t1;
+    delete t2;
+}
 
 TEST(CaseTriangle, IteratorIsDone) {
     TwoDimensionalVector tdv1(3, 12.433);

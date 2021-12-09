@@ -1,13 +1,14 @@
 #pragma once
 
+#include <string>
 #include <stdexcept>
-#include "./iterator/iterator.h"
-#include "./iterator/null_iterator.h"
-#include "./shape_visitor.h"
+
+class Iterator;
+class ShapeVisitor;
 
 class Shape {
-public:
-    virtual ~Shape() {};
+   public:
+    virtual ~Shape(){};
 
     virtual double area() const = 0;
 
@@ -19,13 +20,7 @@ public:
 
     virtual void accept(ShapeVisitor* visitor) = 0;
 
-    virtual void accept(ShapeVisitor* visitor, int stage) = 0;
+    virtual void addShape(Shape* shape) { throw std::out_of_range("error"); }
 
-    virtual void addShape(Shape* shape) {
-        throw std::out_of_range("error");
-    }
-
-    virtual void deleteShape(Shape* shape) {
-        throw std::out_of_range("error");
-    }
+    virtual void deleteShape(Shape* shape) { throw std::out_of_range("error"); }
 };

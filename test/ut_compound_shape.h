@@ -4,6 +4,7 @@
 #include "../src/triangle.h"
 #include "../src/iterator/iterator.h"
 #include "../src/iterator/compound_iterator.h"
+#include "../src/visitor/shape_info_visitor.h"
 #include <stdexcept>
 
 class CaseCompoundShape: public ::testing::Test {
@@ -63,7 +64,7 @@ TEST_F(CaseCompoundShape, Info) {
     cs2->addShape(new Circle(12.34567));
     cs2->addShape(cs1);
 
-    ASSERT_EQ("CompoundShape\n{\nCircle (12.35)\nCompoundShape\n{\nCircle (1.10)\nRectangle (3.14 4.00)\n}\n}", cs2->info());
+    ASSERT_EQ("CompoundShape", cs2->info());
 
     delete cs1;
     delete cs2;
@@ -73,24 +74,51 @@ TEST_F(CaseCompoundShape, DeleteShapeSuccess) {
     Shape* shapes[3] = {c1, c2, r};
     CompoundShape cs(shapes,3);
 
-    cs.deleteShape(c2);
-    ASSERT_EQ("CompoundShape\n{\nCircle (1.00)\nRectangle (5.00 3.00)\n}", cs.info());
+    ASSERT_NO_THROW(cs.deleteShape(c2));
 }
 
-TEST_F(CaseCompoundShape, DeleteShapeFailed) {
-    Shape* c3 = new Circle(3.0);
+TEST_F(CaseCompoundShape, DeleteInnerShape) {
+    CompoundShape* cs1 = new CompoundShape();
+    CompoundShape* cs2 = new CompoundShape();
+    CompoundShape* cs3 = new CompoundShape();
 
-    Shape* shapes[3] = {c1, c2, c3};
-    CompoundShape cs(shapes,3);
+    cs3->addShape(r);
+    cs2->addShape(c2);
+    cs1->addShape(c1);
 
-    ASSERT_THROW(cs.deleteShape(r), std::out_of_range);
+    cs2->addShape(cs3);
+    cs1->addShape(cs2);
 
-    delete c3;
+    ASSERT_NO_THROW(cs1->deleteShape(r));
+
+    delete cs1;
+    delete cs2;
+    delete cs3;
 }
 
 TEST_F(CaseCompoundShape, CreateCompoundIterator) {
     Shape* shapes[3] = {c1, c2, r};
     Shape* shape = new CompoundShape(shapes,3);
+    ASSERT_NO_THROW(shape->createIterator());
+
+    delete shape;
+}
+
+TEST_F(CaseCompoundShape, Accept) {
+    Shape* shapes[3] = {c1, c2, r};
+    Shape* shape = new CompoundShape(shapes,3);
+
+    ShapeInfoVisitor* visitor = new ShapeInfoVisitor();
+    ASSERT_NO_THROW(shape->accept(visitor));
+
+    delete shape;
+    delete visitor;
+}
+
+TEST_F(CaseCompoundShape, CreateIterator) {
+    Shape* shapes[3] = {c1, c2, r};
+    Shape* shape = new CompoundShape(shapes,3);
+
     ASSERT_NO_THROW(shape->createIterator());
 
     delete shape;

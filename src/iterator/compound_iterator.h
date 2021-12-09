@@ -1,52 +1,43 @@
 #pragma once
 
-#include <iterator>
-#include <stdexcept>
+#include <string>
+
 #include "./iterator.h"
-#include "../shape.h"
 
-// you should define a template class or type `ForwardIterator`
-template<class ForwardIterator>
-class CompoundIterator : public Iterator{
-public:
-    CompoundIterator() {}
-
-    CompoundIterator(ForwardIterator begin, ForwardIterator end) {
-        begin_pos = begin;
-        end_pos = end;
-        move_pos = begin;
-        current_shape = *begin_pos;
+template <class ForwardIterator>
+class CompoundIterator : public Iterator {
+   public:
+    CompoundIterator(ForwardIterator begin, ForwardIterator end): _begin(begin), _end(end) {
+        _current = _begin;
     }
 
     void first() override {
-        current_shape = *begin_pos;
-        move_pos = begin_pos;
+        _current = _begin;
     }
-
     Shape* currentItem() const override {
-        if (current_shape == *end_pos) {
+        if (isDone()) {
             throw std::out_of_range("error");
         }
         else{
-            return current_shape;
+            return *_current;
         }
     }
 
     void next() override {
-        if (current_shape == *end_pos) {
+        if (isDone()) {
             throw std::out_of_range("error");
         }
         else {
-            current_shape = *(++move_pos);
+            _current++;
         }
     }
 
     bool isDone() const override {
-        return current_shape == *end_pos;
+        return _current == _end;
     }
-private:
-    Shape* current_shape;
-    ForwardIterator move_pos;
-    ForwardIterator begin_pos;
-    ForwardIterator end_pos;
+
+   private:
+    ForwardIterator _current;
+    ForwardIterator _begin;
+    ForwardIterator _end;
 };

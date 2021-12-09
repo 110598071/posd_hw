@@ -37,6 +37,7 @@ Please add to the skeleton code so that it meets the specifications below.
   - It defines template \<class ForwardIterator> as the type of the begin and 
     the end position , so you should declare the actual type when using 
     `CompoundIterator`.
+  - It points to the begin position when it is created.
   - It points to the begin position in function `first`. 
   - It points to next item in function `next`, and it will throw exception if it 
     already points to the end position.
@@ -65,13 +66,13 @@ Please add to the skeleton code so that it meets the specifications below.
 
 result of `cs2.info()`(don't print '\n', it just remind you there has a \n)
 ```
-Compound Shape\n
+CompoundShape\n
 {\n
-Circle(12.35)\n
-Compound Shape\n
+Circle (12.35)\n
+CompoundShape\n
 {\n
-Circle(1.10)\n
-Rectangle(3.14 4.00)\n
+Circle (1.10)\n
+Rectangle (3.14 4.00)\n
 }\n
 }
 ```

@@ -1,4 +1,22 @@
 #include "../src/rectangle.h"
+#include "../src/visitor/shape_info_visitor.h"
+
+TEST(CaseRectangle, Accept) {
+    Shape* r1 = new Rectangle(1.0, 2.0);
+    ShapeInfoVisitor* visitor = new ShapeInfoVisitor();
+    ASSERT_NO_THROW(r1->accept(visitor));
+    
+    delete r1;
+}
+
+TEST(CaseRectangle, Delete) {
+    Shape* r1 = new Rectangle(1.0, 2.0);
+    Shape* r2 = new Rectangle(1.0, 2.0);
+    
+    ASSERT_THROW(r1->deleteShape(r2), std::out_of_range);
+    delete r1;
+    delete r2;
+}
 
 TEST(CaseRectangle, IteratorIsDone) {
     Rectangle r(1.0, 2.0);

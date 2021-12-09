@@ -1,4 +1,22 @@
 #include "../src/circle.h"
+#include "../src/visitor/shape_info_visitor.h"
+
+TEST(CaseCircle, Accept) {
+    Shape* c1 = new Circle(1.0);
+    ShapeInfoVisitor* visitor = new ShapeInfoVisitor();
+    ASSERT_NO_THROW(c1->accept(visitor));
+
+    delete c1;
+}
+
+TEST(CaseCircle, Delete) {
+    Shape* c1 = new Circle(1.0);
+    Shape* c2 = new Circle(2.0);
+    
+    ASSERT_THROW(c1->deleteShape(c2), std::out_of_range);
+    delete c1;
+    delete c2;
+}
 
 TEST(CaseCircle, IteratorIsDone) {
     Circle c(1.0);
